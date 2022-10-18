@@ -25,14 +25,13 @@ namespace WebAppMySchedule.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Person>>> GetPerson()
         {
-            return await _context.Person.ToListAsync();
+            return await _context.Person.Include(people => people.Address).AsNoTracking().ToListAsync();
         }
-
         // GET: api/People/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Person>> GetPerson(int id)
         {
-            var person = await _context.Person.FindAsync(id);
+            var person = await _context.Person.Include(p=> p.Address).AsNoTracking().FirstOrDefaultAsync(x => x.IdPerson == id);
 
             if (person == null)
             {

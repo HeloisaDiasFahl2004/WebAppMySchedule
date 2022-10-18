@@ -14,6 +14,7 @@ namespace WebAppMySchedule.Models
         public string Country { get; set; }
         [ForeignKey("Person")]
         public int IdPerson { get; set; }
+        public Person Person { get; set; }
 
     }
 }
