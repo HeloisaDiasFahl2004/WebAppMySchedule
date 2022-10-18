@@ -17,5 +17,7 @@ namespace WebAppMySchedule.Data
         public DbSet<WebAppMySchedule.Models.Person> Person { get; set; }
 
         public DbSet<WebAppMySchedule.Models.Address> Address { get; set; }
+
+        public DbSet<WebAppMySchedule.Models.Phone> Phone { get; set; }
     }
 }

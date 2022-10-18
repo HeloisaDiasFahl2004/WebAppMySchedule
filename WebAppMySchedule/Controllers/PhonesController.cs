@@ -12,46 +12,47 @@ namespace WebAppMySchedule.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PeopleController : ControllerBase
+    public class PhonesController : ControllerBase
     {
         private readonly WebAppMyScheduleContext _context;
 
-        public PeopleController(WebAppMyScheduleContext context)
+        public PhonesController(WebAppMyScheduleContext context)
         {
             _context = context;
         }
 
-        // GET: api/People
+        // GET: api/Phones
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Person>>> GetPerson()
+        public async Task<ActionResult<IEnumerable<Phone>>> GetPhone()
         {
-            return await _context.Person.Include(p => p.Address).Include(p=> p.Phones).AsNoTracking().ToListAsync();
+            return await _context.Phone.ToListAsync();
         }
-        // GET: api/People/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Person>> GetPerson(int id)
-        {
-            var person = await _context.Person.Include(p=> p.Address).Include(p=>p.Phones).AsNoTracking().FirstOrDefaultAsync(x => x.IdPerson == id);
 
-            if (person == null)
+        // GET: api/Phones/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Phone>> GetPhone(int id)
+        {
+            var phone = await _context.Phone.FindAsync(id);
+
+            if (phone == null)
             {
                 return NotFound();
             }
 
-            return person;
+            return phone;
         }
 
-        // PUT: api/People/5
+        // PUT: api/Phones/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPerson(int id, Person person)
+        public async Task<IActionResult> PutPhone(int id, Phone phone)
         {
-            if (id != person.IdPerson)
+            if (id != phone.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(person).State = EntityState.Modified;
+            _context.Entry(phone).State = EntityState.Modified;
 
             try
             {
@@ -59,7 +60,7 @@ namespace WebAppMySchedule.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PersonExists(id))
+                if (!PhoneExists(id))
                 {
                     return NotFound();
                 }
@@ -72,36 +73,36 @@ namespace WebAppMySchedule.Controllers
             return NoContent();
         }
 
-        // POST: api/People
+        // POST: api/Phones
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Person>> PostPerson(Person person)
+        public async Task<ActionResult<Phone>> PostPhone(Phone phone)
         {
-            _context.Person.Add(person);
+            _context.Phone.Add(phone);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetPerson", new { id = person.IdPerson }, person);
+            return CreatedAtAction("GetPhone", new { id = phone.Id }, phone);
         }
 
-        // DELETE: api/People/5
+        // DELETE: api/Phones/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePerson(int id)
+        public async Task<IActionResult> DeletePhone(int id)
         {
-            var person = await _context.Person.FindAsync(id);
-            if (person == null)
+            var phone = await _context.Phone.FindAsync(id);
+            if (phone == null)
             {
                 return NotFound();
             }
 
-            _context.Person.Remove(person);
+            _context.Phone.Remove(phone);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool PersonExists(int id)
+        private bool PhoneExists(int id)
         {
-            return _context.Person.Any(e => e.IdPerson == id);
+            return _context.Phone.Any(e => e.Id == id);
         }
     }
 }
